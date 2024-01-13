@@ -1,17 +1,25 @@
 use rocket::serde::json::Json;
-use rocket::serde::Deserialize;
+use rocket::serde::{Serialize, Deserialize};
 use rocket::State;
 
 use crate::data::note_tab::NoteTab;
 use crate::data::note_tab_key::NoteTabKey;
 use crate::Injectables;
 
+#[post("/tab/new", format="json", data="<json>")]
+pub fn save_new_note_tab(
+    json: Json<SaveNoteTabInput>, 
+    injectables_state: &State<Injectables>
+) -> Json<SaveNoteTabOutput> {
+    save_note_tab(NoteTabKey::new(), json, injectables_state)
+}
+
 #[post("/tab/<key>", format="json", data="<json>")]
 pub fn save_note_tab(
     key: NoteTabKey, 
     json: Json<SaveNoteTabInput>, 
     injectables_state: &State<Injectables>
-) {
+) -> Json<SaveNoteTabOutput> {
     let input: SaveNoteTabInput = json.into_inner();
     let to_save = NoteTab::new(input.title, input.body)
         .to_string()
@@ -20,6 +28,9 @@ pub fn save_note_tab(
         .get_io()
         .put_string(key.get().to_string(), to_save)
         .expect("failed to write string");
+    Json(SaveNoteTabOutput {
+        key: key.get().to_string()
+    })
 }
 
 #[derive(Deserialize)]
@@ -28,8 +39,13 @@ pub struct SaveNoteTabInput {
     body: String,
 }
 
+#[derive(Serialize)]
+pub struct SaveNoteTabOutput {
+    key: String,
+}
+
 #[cfg(test)]
-mod unittests {
+mod unit_tests {
     use super::*;
     use rocket;
     use rocket::local::blocking::Client;

@@ -1,17 +1,33 @@
+use rand::{distributions::Alphanumeric, Rng};
 use regex::Regex;
 use rocket::request::FromParam;
 
-
-pub struct NoteTabKey {
-    key: String,
-}
 lazy_static!{
     static ref KEY_FORMAT: Regex = Regex::new("^nt[a-zA-Z0-9]{15}$").unwrap();
 }
 
+pub struct NoteTabKey {
+    key: String,
+}
+
 impl NoteTabKey {
+    pub fn new() -> Self {
+        NoteTabKey {
+            key: Self::generate_valid_key(),
+        }
+    }
+
     fn is_valid_key(potential_key: &str) -> bool {
         KEY_FORMAT.is_match(potential_key)
+    }
+
+    fn generate_valid_key() -> String {
+        let s: String = rand::thread_rng()
+            .sample_iter(&Alphanumeric)
+            .take(15)
+            .map(char::from)
+            .collect();
+        format!("nt{}", s)
     }
 
     pub fn get(&self) -> &String {
@@ -30,4 +46,10 @@ impl <'r> FromParam<'r> for NoteTabKey {
         }
         Err(format!("{} was not valid key" , param))
     }
+}
+
+#[cfg(test)]
+mod unit_tests {
+    use super::*;
+
 }

@@ -14,8 +14,8 @@ mod io;
 use crate::activity::{
     get_note_tab::get_note_tab,
     save_note_tab::save_note_tab,
+    save_note_tab::save_new_note_tab,
 };
-
 
 fn get_page_directory_path() -> String {
     format!("{}/../client/build", env!("CARGO_MANIFEST_DIR"))
@@ -23,7 +23,7 @@ fn get_page_directory_path() -> String {
 
 #[get("/<_..>")]
 async fn index() -> Result<NamedFile> {
-  NamedFile::open(Path::new(&get_page_directory_path()).join("index.html")).await
+    NamedFile::open(Path::new(&get_page_directory_path()).join("index.html")).await
 }
 
 #[get("/static/<file..>")]
@@ -56,5 +56,6 @@ fn rocket() -> _ {
             icon,
             get_note_tab,
             save_note_tab,
+            save_new_note_tab,
         ])
 }

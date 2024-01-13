@@ -18,3 +18,4 @@ features = ["derive"]
 [dependencies]
 regex = "1.10.2"
 lazy_static = "1.4.0"
+rand = "0.8.5"
