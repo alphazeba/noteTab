@@ -5,7 +5,7 @@ import {useInputState} from '../bits/useInputState';
 import {useLastState} from '../bits/useLastState';
 import {useParams, useNavigate} from 'react-router-dom';
 import '@mdxeditor/editor/style.css'
-import { MDXEditor, 
+import { MDXEditor,
     headingsPlugin,
     listsPlugin,
     linkPlugin,
@@ -23,6 +23,8 @@ export function Tab() {
     const [dynamicDirty, setDynamicDirty] = useState(false);
     const [dirty, lastDirty, setDirty] = useLastState(false);
     const [loadedGame, setLoadedGame] = useState(false);
+
+    const ref = React.useRef(null)
 
     useEffect(() => {
         const interval = setInterval(()=>{
@@ -69,7 +71,12 @@ export function Tab() {
       loadTab(key).then((result) => {
         setTitle(result.title);
         setBody(result.body);
-        setDynamicDirty(false);
+        ref.current?.setMarkdown(result.body);
+        // setDynamicDirty(false);
+        // this no longer solves the problem.
+        // setting marking down in the editor triggeres an onchange event that redirties things.
+        // need to figure out how to prevent that first onchange from redirtying things.
+        // i could maybe make the dirty flag numb for a single call?
       }).catch(err => console.log(err));
     }
   
@@ -87,6 +94,7 @@ export function Tab() {
                 <input className='title simpleOutline' value={title} onChange={titleChange}/>
                 <div className='editor simpleOutline'>
                     <MDXEditor
+                        ref={ref}
                         className='dark-theme'
                         markdown={body}
                         onChange={setBody}
