@@ -5,13 +5,15 @@ use rocket::serde::json::serde_json;
 pub struct NoteTab {
     pub title: String,
     pub body: String,
+    pub version: u32,
 }
 
 impl NoteTab {
     pub fn new(title: String, body: String) -> Self {
         NoteTab {
             title,
-            body
+            body,
+            version: 0, // this doesn't do anything yet
         }
     }
 

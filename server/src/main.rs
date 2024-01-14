@@ -15,6 +15,7 @@ use crate::activity::{
     get_note_tab::get_note_tab,
     save_note_tab::save_note_tab,
     save_note_tab::save_new_note_tab,
+    list_note_tabs::list_note_tabs,
 };
 
 fn get_page_directory_path() -> String {
@@ -57,5 +58,6 @@ fn rocket() -> _ {
             get_note_tab,
             save_note_tab,
             save_new_note_tab,
+            list_note_tabs,
         ])
 }
