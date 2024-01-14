@@ -27,16 +27,19 @@ export function Home() {
 
     const renderItems = () => {
         return tabs.map((tab) => {
-            return <button key={tab.key} onClick={()=>handleTabClick(tab.key)}>
-                {tab.title}
-            </button>;
+            return <div>
+                <button className='ntButton simpleOutline' key={tab.key} onClick={()=>handleTabClick(tab.key)}>
+                    {tab.title}
+                </button>
+            </div>;
         });
     }
 
     return (
         <Wrapper>
-            <div>hello world</div>
-            <button onClick={()=>navigate("notetab/new")}>new</button>
+            <div>
+                <button className='ntButton simpleOutline' onClick={()=>navigate("notetab/new")}>New Note Tab</button>
+            </div>
             {renderItems()}
         </Wrapper>
     );
