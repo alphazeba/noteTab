@@ -1,24 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import {loadTab, saveTab} from '../io/api';
+import {Wrapper} from '../bits/Wrapper';
 import {useInputState} from '../bits/useInputState';
 import {useLastState} from '../bits/useLastState';
 import {useParams, useNavigate} from 'react-router-dom';
+import '@mdxeditor/editor/style.css'
+import { MDXEditor, 
+    headingsPlugin,
+    listsPlugin,
+    linkPlugin,
+    quotePlugin,
+    thematicBreakPlugin,
+    markdownShortcutPlugin,
+} from '@mdxeditor/editor'
 
 export function Tab() {
     const navigate = useNavigate();
     const {urlKey} = useParams();
     const [key, setKey, keyChange] = useInputState(urlKey);
-    const [title, setTitle, titleChange, setTitleOnChange] = useInputState("Note Tab", true);
+    const [title, setTitle, titleChange, setTitleOnChange] = useInputState("New Note", true);
     const [body, setBody, bodyChange, setBodyOnChange] = useInputState("", true);
     const [dynamicDirty, setDynamicDirty] = useState(false);
     const [dirty, lastDirty, setDirty] = useLastState(false);
     const [loadedGame, setLoadedGame] = useState(false);
 
     useEffect(() => {
-        console.log('effect is firing');
         const interval = setInterval(()=>{
             onPeriodicUpdate();
-        }, 3 * 1000);
+        }, 2 * 1000);
         if(!loadedGame) {
             handleLoad();
             setLoadedGame(true);
@@ -73,13 +82,25 @@ export function Tab() {
     }
 
     return (
-        <div className="App">
-          <header className="App-header">
-            <input value={title} onChange={titleChange}/>
-            <textarea type="text" value={body} onChange={bodyChange}/>
-            <p>{title}</p>
-            <p>{body}</p>
-          </header>
-        </div>
+        <Wrapper>
+            <div className='tab'>
+                <input className='title simpleOutline' value={title} onChange={titleChange}/>
+                <div className='editor simpleOutline'>
+                    <MDXEditor
+                        className='dark-theme'
+                        markdown={body}
+                        onChange={setBody}
+                        plugins={[
+                            headingsPlugin(),
+                            listsPlugin(),
+                            linkPlugin(),
+                            quotePlugin(),
+                            thematicBreakPlugin(),
+                            markdownShortcutPlugin()
+                        ]}
+                    />
+                </div>
+            </div>
+        </Wrapper>
       );
 }
