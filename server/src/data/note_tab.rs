@@ -21,18 +21,17 @@ impl NoteTab {
         Self::new("NoteTab".to_string(), "".to_string())
     }
 
-    pub fn load(key: String) -> Result<Self, String> {
-
-        Ok(Self::new("test".to_string(), "test".to_string()))
-    }
-
     pub fn from_string(json: String) -> Result<Self, String> {
         serde_json::from_str(&json)
-            .map_err(|err| {"failed to deserialize note tab".to_string()})
+            .map_err(|err| {
+                format!("failed to deserialize note tab with err: {}", err.to_string())
+            })
     }
 
     pub fn to_string(&self) -> Result<String, String> {
         serde_json::to_string(self)
-            .map_err(|err| {"Failed to serialize notetab".to_string()})
+            .map_err(|err| {
+                format!("Failed to serialize notetabwith err: {}", err.to_string())
+            })
     }
 }

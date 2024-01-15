@@ -63,7 +63,7 @@ mod unit_tests {
             .header(ContentType::JSON)
             .body(r#"{ "title": "ur mum", "body": "is nice" }"#)
             .dispatch();
-        let code = response.status().code;
-        assert!(matches!(200, code));
+        let _code = response.status().code;
+        assert!(matches!(200, _code));
     }
 }

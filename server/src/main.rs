@@ -31,7 +31,17 @@ async fn index() -> Result<NamedFile> {
 async fn webapp_files(file: PathBuf) -> Result<NamedFile> {
     let path = Path::new(&get_page_directory_path()).join("static").join(file);
     match path.to_str() {
-        Some(ref s) => print!("fetching file {}", s),
+        Some(s) => print!("fetching file {}", s),
+        None => print!("there was no path to fetch :(")
+    }
+    NamedFile::open(path).await
+}
+
+#[get("/foldericon.svg")]
+async fn folder_icon() -> Result<NamedFile> {
+    let path = Path::new(&get_page_directory_path()).join("foldericon.svg");
+    match path.to_str() {
+        Some(s) => print!("fetching file {}", s),
         None => print!("there was no path to fetch :(")
     }
     NamedFile::open(path).await
@@ -54,6 +64,7 @@ fn rocket() -> _ {
         .mount("/", routes![
             index,
             webapp_files,
+            folder_icon,
             icon,
             get_note_tab,
             save_note_tab,

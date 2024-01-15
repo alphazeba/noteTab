@@ -26,7 +26,7 @@
 
 :root {
   color: white;
-  background-color: #282c34;
+  background-color: #181c24;
 }
 
 .App-link {
@@ -42,16 +42,35 @@
   }
 }
 
+.ntButtonHolder {
+  text-align: left;
+  margin-left: calc(50% - 5em);
+}
+
 .ntButton {
   font-size: 1.5em;
   border-radius: 0;
   background-color: inherit;
   cursor: pointer;
-  color: white
+  color: white;
+  border: none;
+}
+
+.noTabs {
+  display: inline-block;
+  cursor: default;
+}
+
+.header {
+  background-color: #282c34;
+  margin: 0;
+  padding: 1em;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .ntButton:hover {
-  background-color: #181c24;
+  background-color: #282c34;
 }
 
 .simpleOutline {
@@ -66,10 +85,6 @@
   margin-right: 2em;
 }
 
-.editor {
-  margin-top: 1em;
-}
-
 .title {
   background-color: inherit;
   color: white;
@@ -77,4 +92,61 @@
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bolder;
   text-align: left;
+  width: 100%;
+  border-width: 1px;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-color: white;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.title:focus {
+  outline: none;
+  border: 1px solid white;
+}
+
+.editor {
+  margin-top: 1em;
+  border-color: 0;
+  background-color: #282c34;
+}
+
+.editor:focus-within {
+  border: 1px solid white;
+}
+
+.titleSpot {
+  color: white;
+  text-decoration: none;
+}
+
+.noteTabTitle:hover {
+  text-decoration: underline;
+}
+
+.hoverLift {
+  transition: transform 0.25s;
+  transform: translateY(0);
+}
+
+.hoverLift:hover {
+  transform: translateY(-0.1em);
+}
+
+.thePlus {
+  border-radius: 50%;
+  background-color: white;
+  color: black;
+  display: inline-block;
+  width: 1.3em;
+  height: 1.3em;
+  font-weight: bolder;
+  margin-left: 1.4em;
+}
+
+.folderIcon {
+  vertical-align: bottom;
+  margin-right: 1em;
 }

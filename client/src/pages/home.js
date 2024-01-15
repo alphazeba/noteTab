@@ -12,6 +12,7 @@ export function Home() {
     useEffect(() => {
         if(!loadedTabs) {
             handleLoad();
+            setLoadedTabs(true);
         }
     });
 
@@ -25,10 +26,28 @@ export function Home() {
         navigate('notetab/' + key);
     }
 
-    const renderItems = () => {
+    const noTabsNotice = () => {
+        return (<React.Fragment>
+            <div>
+                <span className='ntButton noTabs'>
+                    Tabs would show up here
+                </span>
+            </div>
+            <div>
+                <span className='ntButton noTabs'>
+                    press the (+) to create a tab
+                </span>
+            </div>
+        </React.Fragment>);
+    }
+
+    const renderTabs = () => {
+        if (tabs.length === 0) {
+            return noTabsNotice();
+        }
         return tabs.map((tab) => {
             return <div>
-                <button className='ntButton simpleOutline' key={tab.key} onClick={()=>handleTabClick(tab.key)}>
+                <button className='ntButton' key={tab.key} onClick={()=>handleTabClick(tab.key)}>
                     {tab.title}
                 </button>
             </div>;
@@ -37,10 +56,9 @@ export function Home() {
 
     return (
         <Wrapper>
-            <div>
-                <button className='ntButton simpleOutline' onClick={()=>navigate("notetab/new")}>New Note Tab</button>
+            <div className='ntButtonHolder'>
+                {renderTabs()}
             </div>
-            {renderItems()}
         </Wrapper>
     );
 }

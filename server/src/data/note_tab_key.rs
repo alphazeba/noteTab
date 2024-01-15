@@ -47,9 +47,3 @@ impl <'r> FromParam<'r> for NoteTabKey {
         Err(format!("{} was not valid key" , param))
     }
 }
-
-#[cfg(test)]
-mod unit_tests {
-    use super::*;
-
-}

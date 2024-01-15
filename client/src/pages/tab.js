@@ -91,8 +91,8 @@ export function Tab() {
     return (
         <Wrapper>
             <div className='tab'>
-                <input className='title simpleOutline' value={title} onChange={titleChange}/>
-                <div className='editor simpleOutline'>
+                <input className='title' value={title} onChange={titleChange}/>
+                <div className='editor'>
                     <MDXEditor
                         ref={ref}
                         className='dark-theme'

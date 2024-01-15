@@ -107,7 +107,7 @@ mod tests {
         let file_name = "testFile.txt";
         let content = "hello there";
         fileio.put_string(file_name.to_string(), content.to_string()).unwrap();
-        let new_content = fileio.get_string(file_name.to_string()).unwrap();
-        assert!(matches!(content.to_string(), new_content))
+        let _new_content = fileio.get_string(file_name.to_string()).unwrap();
+        assert!(matches!(content.to_string(), _new_content))
     }
 }
