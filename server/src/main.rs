@@ -55,9 +55,9 @@ async fn icon(key: Option<String>) -> Result<NamedFile> {
 }
 
 #[launch]
-fn rocket() -> _ {
+fn build_rocket() -> _ {
     let injectables = Injectables {
-        ioio: FileIo::new_default()
+        ioio: FileIo::new(format!("{}/{}", env!("HOME"), ".notetab/tabs"))
     };
     rocket::build()
         .manage(injectables)

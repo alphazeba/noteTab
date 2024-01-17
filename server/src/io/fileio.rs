@@ -12,12 +12,8 @@ pub struct FileIo {
 impl FileIo {
     pub fn new(base_path: String) -> Self {
         Self {
-            base_path: format!("{}/{}", env!("CARGO_MANIFEST_DIR"), base_path),
+            base_path,
         }
-    }
-
-    pub fn new_default() -> Self {
-        Self::new("userdata".to_string())
     }
 
     fn get_path(&self, address: String) -> PathBuf {
@@ -98,7 +94,7 @@ mod tests {
     use super::*;
 
     fn get_fileio() -> FileIo {
-        FileIo::new("testdir".to_string())
+        FileIo::new(format!("{}/{}", env!("CARGO_MANIFEST_DIR"), "testdir"))
     }
 
     #[test]

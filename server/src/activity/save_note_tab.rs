@@ -46,13 +46,14 @@ pub struct SaveNoteTabOutput {
 
 #[cfg(test)]
 mod unit_tests {
-    use super::*;
     use rocket;
     use rocket::local::blocking::Client;
     use rocket::http::ContentType;
+    
+    use crate::build_rocket;
 
     fn client() -> Client {
-        let rocket = rocket::build().mount("/", routes![save_note_tab]);
+        let rocket = build_rocket();
         Client::tracked(rocket).expect("valid rocket")
     }
 
