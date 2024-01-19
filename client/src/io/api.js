@@ -15,6 +15,10 @@ export function listTabs() {
     return api("listtabs", GET());
 }
 
+export function deleteTab(key) {
+    return api("tab/" + key, DELETE());
+}
+
 ///// helpers below
 // should be able to chain with .then((parsedJsonObj) => {..})
 function api(path, payload) {
@@ -40,4 +44,10 @@ function GET() {
     return {
         method: 'GET',
     };
+}
+
+function DELETE() {
+    return {
+        method: 'DELETE',
+    }
 }

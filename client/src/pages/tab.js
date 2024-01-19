@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {loadTab, saveTab} from '../io/api';
+import {loadTab, saveTab, deleteTab} from '../io/api';
 import {Wrapper} from '../bits/Wrapper';
 import {useInputState} from '../bits/useInputState';
 import {useLastState} from '../bits/useLastState';
@@ -9,6 +9,7 @@ import { MDXEditor,
     headingsPlugin,
     listsPlugin,
     linkPlugin,
+    linkDialogPlugin,
     quotePlugin,
     thematicBreakPlugin,
     markdownShortcutPlugin,
@@ -23,6 +24,7 @@ export function Tab() {
     const [dynamicDirty, setDynamicDirty] = useState(false);
     const [dirty, lastDirty, setDirty] = useLastState(false);
     const [loadedGame, setLoadedGame] = useState(false);
+    const [deleteActivated, setDeleteActivated] = useState(false);
 
     const ref = React.useRef(null)
 
@@ -88,8 +90,34 @@ export function Tab() {
       }).catch(err => console.log(err));
     }
 
+    const handleDelete = () => {
+        deleteTab(key).then((result) => {
+            if (result.key_is_gone == true) {
+                navigate('/');
+            } else {
+                console.log("key was not deleted");
+            }
+        }).catch(err => console.log(err));
+    }
+
+    const handleActivateDeleteButton = () => {
+        setDeleteActivated(true);
+    }
+
+    const renderDeleteButton = () => {
+        let className = 'deleteButton';
+        let handler = handleActivateDeleteButton;
+        if (deleteActivated) {
+            className += ' activeDeleteButton';
+            handler = handleDelete;
+        }
+        return <button className={className} onClick={handler}>
+            x
+        </button>
+    }
+
     return (
-        <Wrapper>
+        <Wrapper rightContents={renderDeleteButton()}>
             <div className='tab'>
                 <input className='title' value={title} onChange={titleChange}/>
                 <div className='editor'>
@@ -102,6 +130,7 @@ export function Tab() {
                             headingsPlugin(),
                             listsPlugin(),
                             linkPlugin(),
+                            linkDialogPlugin(),
                             quotePlugin(),
                             thematicBreakPlugin(),
                             markdownShortcutPlugin()

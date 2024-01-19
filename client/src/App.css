@@ -62,6 +62,7 @@
 }
 
 .header {
+  position: relative;
   background-color: #282c34;
   margin: 0;
   padding: 1em;
@@ -86,35 +87,34 @@
 }
 
 .title {
-  background-color: inherit;
+  background-color: transparent;
   color: white;
   font-size: 4em;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bolder;
   text-align: left;
   width: 100%;
-  border-width: 1px;
-  border-top: 0;
-  border-left: 0;
-  border-right: 0;
-  border-color: white;
+  border: 1px solid white;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
   padding-right: 0;
   padding-left: 0;
 }
 
 .title:focus {
   outline: none;
-  border: 1px solid white;
+  border-color: white;
 }
 
 .editor {
   margin-top: 1em;
-  border-color: 0;
+  border: 1px solid transparent;
   background-color: #282c34;
 }
 
 .editor:focus-within {
-  border: 1px solid white;
+  border-color: white;
 }
 
 .titleSpot {
@@ -149,4 +149,44 @@
 .folderIcon {
   vertical-align: bottom;
   margin-right: 1em;
+}
+
+.rightContents {
+  position: absolute;
+  right: 0.7em;
+  top: 50%;
+  transform: translatey(-50%);
+}
+
+.deleteButton {
+  font-size: 1em;
+  font-weight: bolder;
+  outline: none;
+  border: 0.2em solid;
+  padding-bottom: 0.2em;
+  width: 1.8em;
+  color: #181c24;;
+  border-color: #181c24;
+  background-color: transparent;
+  transition: all 0.25s;
+}
+
+.deleteButton:hover {
+  color: black;
+  border-color: black;
+}
+
+.activeDeleteButton {
+  background-color: red;
+  color: black;
+  border-color: black;
+}
+
+.activeDeleteButton:hover {
+  color: white;
+  border-color: white;
+}
+
+.editor a {
+  color: #38b3d1;
 }

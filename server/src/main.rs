@@ -2,9 +2,9 @@
 #[macro_use] extern crate lazy_static;
 use std::path::{Path, PathBuf};
 use std::io::Result;
+use activity::delete_note_tab::delete_note_tab;
 use data::injectables::Injectables;
 use io::fileio::FileIo;
-use io::iointerface::IoInterface;
 use rocket::fs::NamedFile;
 
 mod activity;
@@ -70,5 +70,6 @@ fn build_rocket() -> _ {
             save_note_tab,
             save_new_note_tab,
             list_note_tabs,
+            delete_note_tab,
         ])
 }

@@ -1,8 +1,10 @@
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
-use std::fs::{File, OpenOptions, read_dir};
+use std::fs::{File, OpenOptions, read_dir, remove_file};
 use std::io::Error;
-use crate::IoInterface;
+use std::io::ErrorKind;
+
+use super::iointerface::{IoInterface, DeleteOutcome};
 
 pub struct FileIo {
     base_path: String,
@@ -60,6 +62,15 @@ impl IoInterface for FileIo {
             Self::lazy_err("write to file".to_string(), err)
         })?;
         Ok(())
+    }
+
+    fn delete(&self, address: String) -> Result<DeleteOutcome, String> {
+        let path = self.get_path(address.to_string());
+        match remove_file(&path) {
+            Ok(()) => Ok(DeleteOutcome::Deleted),
+            Err(e) if e.kind() == ErrorKind::NotFound => Ok(DeleteOutcome::DidNotExist),
+            Err(e) => Err(format!("could delete file {} because of {}", path.to_str().unwrap_or("no path"), e.to_string())),
+        }
     }
 
     fn list_keys(&self) -> Result<Vec<String>, String> {
