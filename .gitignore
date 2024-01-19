@@ -2,3 +2,4 @@ server/target
 client/node_modules
 client/build
 server/userdata/*
+.DS_Store
