@@ -18,7 +18,7 @@ impl FileIo {
         }
     }
 
-    fn get_path(&self, address: String) -> PathBuf {
+    fn get_path(&self, address: &str) -> PathBuf {
         Path::new(&self.base_path).join(address)
     }
 
@@ -29,7 +29,7 @@ impl FileIo {
 }
 
 impl IoInterface for FileIo {
-    fn get_string(&self, address: String) -> Result<String, String> {
+    fn get_string(&self, address: &str) -> Result<String, String> {
         let path = self.get_path(address);
         let mut file = File::open(&path)
             .map_err(|err| {
@@ -45,7 +45,7 @@ impl IoInterface for FileIo {
         Ok(contents)
     }
 
-    fn put_string(&self, address: String, thing: String) -> Result<(),String> {
+    fn put_string(&self, address: &str, thing: &str) -> Result<(),String> {
         let path = self.get_path(address);
         let mut file = OpenOptions::new()
             .write(true)
@@ -64,8 +64,8 @@ impl IoInterface for FileIo {
         Ok(())
     }
 
-    fn delete(&self, address: String) -> Result<DeleteOutcome, String> {
-        let path = self.get_path(address.to_string());
+    fn delete(&self, address: &str) -> Result<DeleteOutcome, String> {
+        let path = self.get_path(address);
         match remove_file(&path) {
             Ok(()) => Ok(DeleteOutcome::Deleted),
             Err(e) if e.kind() == ErrorKind::NotFound => Ok(DeleteOutcome::DidNotExist),
@@ -113,8 +113,8 @@ mod tests {
         let fileio = get_fileio();
         let file_name = "testFile.txt";
         let content = "hello there";
-        fileio.put_string(file_name.to_string(), content.to_string()).unwrap();
-        let _new_content = fileio.get_string(file_name.to_string()).unwrap();
+        fileio.put_string(file_name, content).unwrap();
+        let _new_content = fileio.get_string(file_name).unwrap();
         assert!(matches!(content.to_string(), _new_content))
     }
 }

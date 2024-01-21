@@ -8,7 +8,7 @@ use crate::io::iointerface::IoInterface;
 
 #[get("/listtabs")]
 pub fn list_note_tabs(injectables_state: &State<Injectables>) -> Json<ListNoteTabsOutput> {
-    let io = injectables_state.inner().get_io();
+    let io = injectables_state.get_io();
     let keys = io.list_keys().unwrap();
     let mut items: Vec<KeyTitle> = Vec::new();
     for key in keys {
@@ -24,7 +24,7 @@ pub fn list_note_tabs(injectables_state: &State<Injectables>) -> Json<ListNoteTa
 }
 
 fn get_key_title(key: &String, io: &dyn IoInterface) -> Result<KeyTitle, String> {
-    let note_tab = NoteTab::from_string(io.get_string(key.to_string())?)?;
+    let note_tab = NoteTab::from_string(io.get_string(key)?)?;
     Ok(KeyTitle {
         key: key.to_string(),
         title: note_tab.title,

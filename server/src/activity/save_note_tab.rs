@@ -24,9 +24,9 @@ pub fn save_note_tab(
     let to_save = NoteTab::new(input.title, input.body)
         .to_string()
         .expect("could not unwrap notetab to save it");
-    injectables_state.inner()
+    injectables_state
         .get_io()
-        .put_string(key.get().to_string(), to_save)
+        .put_string(key.get(), &to_save)
         .expect("failed to write string");
     Json(SaveNoteTabOutput {
         key: key.get().to_string()

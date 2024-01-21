@@ -30,7 +30,7 @@ impl NoteTabKey {
         format!("nt{}", s)
     }
 
-    pub fn get(&self) -> &String {
+    pub fn get(&self) -> &str {
         &self.key
     }
 }

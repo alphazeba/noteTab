@@ -8,9 +8,9 @@ use crate::data::note_tab_key::NoteTabKey;
 
 #[get("/tab/<key>")]
 pub fn get_note_tab(key: NoteTabKey, injectables_state: &State<Injectables>) -> Json<GetNoteTabOutput> {
-    let note_tab = match injectables_state.inner()
+    let note_tab = match injectables_state
         .get_io()
-        .get_string(key.get().to_string()) {
+        .get_string(key.get()) {
             Ok(json) => NoteTab::from_string(json)
                 .expect("could not deserialize note tab"),
             Err(msg) => {
