@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Wrapper} from '../bits/Wrapper';
-import {useParams, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {generateNotePadKey} from '../util/generateNoteTabKey';
 import {validateKey} from '../io/api';
 
@@ -27,7 +27,8 @@ export function New() {
             })
             .catch(err => {
                 console.log(err);
-                console.log("potential key: " + potentialKey + " was not valid");
+                console.log(
+                    "potential key: " + potentialKey + " was not valid");
                 setWaiting(false);
             });
     }

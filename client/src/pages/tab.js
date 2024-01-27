@@ -23,30 +23,47 @@ export function Tab() {
     const [body, setBody, bodyChange, setBodyOnChange] = useInputState("", true);
     const [dynamicDirty, setDynamicDirty] = useState(false);
     const [dirty, lastDirty, setDirty] = useLastState(false);
-    const [loadedGame, setLoadedGame] = useState(false);
+    const [tabIsLoaded, setTabIsLoaded] = useState(false);
+    const [waiting, setWaiting] = useState(false);
     const [deleteActivated, setDeleteActivated] = useState(false);
+    const runEffectJustOnce = true;
 
     const ref = React.useRef(null)
 
     useEffect(() => {
-        const interval = setInterval(()=>{
-            onPeriodicUpdate();
-        }, 2 * 1000);
-        if(!loadedGame) {
+        if(!(tabIsLoaded || waiting)) {
             handleLoad();
-            setLoadedGame(true);
         }
+    }, [tabIsLoaded, waiting]);
+
+
+    // right now this effect runs on any change. which overwrites the interval.
+    // which "works" however, it is not intuitive and makes the interval time 
+    // imprecise.
+    // here is an article on why this doesn't work how i want it to
+    // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+    // i don't like the idea of setting up a dedicated interval function to force
+    // it to work though. But it would solve the problem.  I think there is a 
+    // simpler option, that potentially doesn't require an interval. maybe just
+    // a singlular delayed function call that is dependent on the contents being updated.
+    // I don't want to check the title and body as that would be expensive operation. 
+    useEffect(() => {
+        console.log("setting up onPeriodicUpdate");
+        const interval = setInterval(() => {
+            onPeriodicUpdate();
+        }, 1 * 1000);
+
         return () => {
             clearInterval(interval);
         }
     });
 
     const onPeriodicUpdate = () => {
-        // i think this ends up working but now how i thought it would
-        // the effect is only run when state changes are made.
-        // this "periodic" update just runs 3 seconds after the most recent change.
-        // so far in testing it appears to work, but maybe there are edge cases becasue
-        // i didn't understand how effect worked when i was planning it?
+        let message = "running periodic update\n" + 
+        "dynamic dirty: " + dynamicDirty + "\n" +
+        "dirty: " + dirty + "\n" +
+        "lastDirty: " + lastDirty + "\n";
+        console.log(message);
         setDirty(dynamicDirty);
         setDynamicDirty(false);
         if(lastDirty === true && dirty === false) {
@@ -56,6 +73,7 @@ export function Tab() {
     }
 
     const dirtyContents = () => {
+        console.log("dirtying contents");
         setDynamicDirty(true);
     }
 
@@ -70,16 +88,18 @@ export function Tab() {
     setBodyOnChange(onBodyChange);
 
     const handleLoad = () => {
-      loadTab(key).then((result) => {
-        setTitle(result.title);
-        setBody(result.body);
-        ref.current?.setMarkdown(result.body);
-        // setDynamicDirty(false);
-        // this no longer solves the problem.
-        // setting marking down in the editor triggeres an onchange event that redirties things.
-        // need to figure out how to prevent that first onchange from redirtying things.
-        // i could maybe make the dirty flag numb for a single call?
-      }).catch(err => console.log(err));
+        setWaiting(true);
+        loadTab(key)
+            .then((result) => {
+                setTitle(result.title);
+                setBody(result.body);
+                setTabIsLoaded(true);
+                ref.current?.setMarkdown(result.body);
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+                setWaiting(false);
+            });
     }
   
     const handleSave = () => {
