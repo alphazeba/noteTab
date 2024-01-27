@@ -8,7 +8,7 @@ use crate::Injectables;
 
 #[post("/tab/new", format="json", data="<json>")]
 pub fn save_new_note_tab(
-    json: Json<SaveNoteTabInput>, 
+    json: Json<SaveNoteTabInput>,
     injectables_state: &State<Injectables>
 ) -> Json<SaveNoteTabOutput> {
     save_note_tab(NoteTabKey::new(), json, injectables_state)

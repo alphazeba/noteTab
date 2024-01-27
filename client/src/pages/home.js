@@ -23,7 +23,7 @@ export function Home() {
     }
 
     const handleTabClick = (key) => {
-        navigate('notetab/' + key);
+        navigate('/notetab/' + key);
     }
 
     const noTabsNotice = () => {

@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import {Tab} from './pages/tab';
 import {Home} from './pages/home';
+import {New} from './pages/new';
 
 function App() {
   const router = createBrowserRouter([
@@ -14,8 +15,12 @@ function App() {
       element: <Home/>,
     },
     {
+      path: "notetab/new",
+      element: <New/>,
+    },
+    {
       path: "notetab/:urlKey",
-      element: <Tab/>
+      element: <Tab/>,
     },
   ]);
 

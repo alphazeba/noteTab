@@ -7,7 +7,9 @@ use crate::data::note_tab::NoteTab;
 use crate::io::iointerface::IoInterface;
 
 #[get("/listtabs")]
-pub fn list_note_tabs(injectables_state: &State<Injectables>) -> Json<ListNoteTabsOutput> {
+pub fn list_note_tabs(
+    injectables_state: &State<Injectables>
+) -> Json<ListNoteTabsOutput> {
     let io = injectables_state.get_io();
     let keys = io.list_keys().unwrap();
     let mut items: Vec<KeyTitle> = Vec::new();

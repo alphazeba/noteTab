@@ -19,6 +19,10 @@ export function deleteTab(key) {
     return api("tab/" + key, DELETE());
 }
 
+export function validateKey(key) {
+    return api("valid/" + key, GET());
+}
+
 ///// helpers below
 // should be able to chain with .then((parsedJsonObj) => {..})
 function api(path, payload) {

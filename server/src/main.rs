@@ -1,8 +1,10 @@
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate lazy_static;
+use rocket::{Rocket, Build};
 use std::path::{Path, PathBuf};
 use std::io::Result;
 use activity::delete_note_tab::delete_note_tab;
+use activity::validate_key::validate_key;
 use data::injectables::Injectables;
 use io::fileio::FileIo;
 use rocket::fs::NamedFile;
@@ -55,7 +57,7 @@ async fn icon(key: Option<String>) -> Result<NamedFile> {
 }
 
 #[launch]
-fn build_rocket() -> _ {
+fn build_rocket() -> Rocket<Build> {
     let injectables = Injectables {
         ioio: FileIo::new(format!("{}/{}", env!("HOME"), ".notetab/tabs"))
     };
@@ -71,5 +73,6 @@ fn build_rocket() -> _ {
             save_new_note_tab,
             list_note_tabs,
             delete_note_tab,
+            validate_key,
         ])
 }
