@@ -19,8 +19,8 @@ export function Tab() {
     const navigate = useNavigate();
     const {urlKey} = useParams();
     const [key, setKey, keyChange] = useInputState(urlKey);
-    const [title, setTitle, titleChange, setTitleOnChange] = useInputState("New Note", true);
-    const [body, setBody, bodyChange, setBodyOnChange] = useInputState("", true);
+    const [title, setTitle, titleChange, setTitleOnChange] = useInputState('New Note', true);
+    const [body, setBody, bodyChange, setBodyOnChange] = useInputState('', true);
     const [dynamicDirty, setDynamicDirty] = useState(false);
     const [dirty, lastDirty, setDirty] = useLastState(false);
     const [tabIsLoaded, setTabIsLoaded] = useState(false);
