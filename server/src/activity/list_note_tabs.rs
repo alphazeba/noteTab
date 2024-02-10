@@ -20,9 +20,14 @@ pub fn list_note_tabs(
                 key.to_string(), msg)
         };
     }
+    items.sort_by(|a, b| sort_form(&a.title).cmp(&sort_form(&b.title)));
     Json(ListNoteTabsOutput {
         items
     })
+}
+
+fn sort_form(title: &String) -> String {
+    title.to_lowercase()
 }
 
 fn get_key_title(key: &String, io: &dyn IoInterface) -> Result<KeyTitle, String> {

@@ -57,7 +57,7 @@ export function Home() {
     }
     setSearchTermOnChange(onSearchTermChange);
 
-    const onSubmitSearch = () => {
+    const handleSubmitSearch = () => {
         console.log('submit pressed');
         let targetTabs = getTargetTabs();
         if (targetTabs.length > 0) {
@@ -119,7 +119,7 @@ export function Home() {
 
     return (
         <Wrapper>
-            <form onSubmit={onSubmitSearch}>
+            <form onSubmit={handleSubmitSearch}>
                 <input
                     className='searchBox'
                     value={searchTerm}
