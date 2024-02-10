@@ -8,7 +8,12 @@ import {Wrapper} from '../bits/Wrapper';
 export function Home() {
     const [loadedTabs, setLoadedTabs] = useState(false);
     const [tabs, setTabs] = useState([]);
-    const [searchTerm, setSearchTerm, searchTermChange, setSearchTermOnChange] = useInputState('', true);
+    const [
+        searchTerm,
+        setSearchTerm,
+        searchTermChange,
+        setSearchTermOnChange
+    ] = useInputState('', true);
     const [filteredTabs, setFilteredTabs] = useState([]);
     const navigate = useNavigate();
 
@@ -31,8 +36,12 @@ export function Home() {
         }).catch(err => console.log(err));
     }
 
-    const handleTabClick = (key) => {
+    const goToTab = (key) => {
         navigate('/notetab/' + key);
+    }
+
+    const handleTabClick = (key) => {
+        goToTab(key);
     }
 
     const filterFunction = (tab, searchTerm) => {
@@ -47,6 +56,14 @@ export function Home() {
         }
     }
     setSearchTermOnChange(onSearchTermChange);
+
+    const onSubmitSearch = () => {
+        console.log('submit pressed');
+        let targetTabs = getTargetTabs();
+        if (targetTabs.length > 0) {
+            goToTab(targetTabs[0].key);
+        }
+    }
 
     const noTabsNotice = () => {
         return (<React.Fragment>
@@ -73,20 +90,27 @@ export function Home() {
         </React.Fragment>);
     }
 
+    const getTargetTabs = () => {
+        if (searchTerm) {
+            return filteredTabs;
+        }
+        return tabs;
+    }
+
     const renderTabs = () => {
         if (tabs.length === 0) {
             return noTabsNotice();
         }
-        let targetTabs = tabs;
-        if (searchTerm) {
-            if (filteredTabs.length === 0) {
-                return nothingMatchesNotice();
-            }
-            targetTabs = filteredTabs;
+        if (searchTerm && filteredTabs.length === 0) {
+            return nothingMatchesNotice();
         }
-        return targetTabs.map((tab) => {
+        return getTargetTabs().map((tab) => {
             return <div>
-                <button className='ntButton' key={tab.key} onClick={()=>handleTabClick(tab.key)}>
+                <button
+                    className='ntButton'
+                    key={tab.key}
+                    onClick={()=>handleTabClick(tab.key)}
+                >
                     {tab.title}
                 </button>
             </div>;
@@ -95,7 +119,14 @@ export function Home() {
 
     return (
         <Wrapper>
-            <input className='searchBox' value={searchTerm} onChange={searchTermChange}/>
+            <form onSubmit={onSubmitSearch}>
+                <input
+                    className='searchBox'
+                    value={searchTerm}
+                    onChange={searchTermChange}
+                    autoFocus
+                />
+            </form>
             <div className='ntButtonHolder'>
                 {renderTabs()}
             </div>

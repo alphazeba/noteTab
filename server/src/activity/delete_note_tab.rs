@@ -14,7 +14,7 @@ pub fn delete_note_tab(
     let success = match ioio.delete(key.get()) {
         Ok(_) => true,
         Err(e) => {
-            println!("deleted resulted in error: {}",e);
+            println!("deleted resulted in error: {}", e);
             false
         }
     };

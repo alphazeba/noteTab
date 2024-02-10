@@ -11,21 +11,21 @@ import {New} from './pages/new';
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <Home/>,
     },
     {
-      path: "notetab/new",
+      path: 'notetab/new',
       element: <New/>,
     },
     {
-      path: "notetab/:urlKey",
+      path: 'notetab/:urlKey',
       element: <Tab/>,
     },
   ]);
 
   return (
-    <div className="App">
+    <div className='App'>
         <RouterProvider router={router} />
     </div>
   );

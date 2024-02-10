@@ -38,7 +38,7 @@ export function Tab() {
 
 
     // right now this effect runs on any change. which overwrites the interval.
-    // which "works" however, it is not intuitive and makes the interval time 
+    // which 'works' however, it is not intuitive and makes the interval time 
     // imprecise.
     // here is an article on why this doesn't work how i want it to
     // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
@@ -48,7 +48,7 @@ export function Tab() {
     // a singlular delayed function call that is dependent on the contents being updated.
     // I don't want to check the title and body as that would be expensive operation. 
     useEffect(() => {
-        console.log("setting up onPeriodicUpdate");
+        console.log('setting up onPeriodicUpdate');
         const interval = setInterval(() => {
             onPeriodicUpdate();
         }, 1 * 1000);
@@ -59,21 +59,16 @@ export function Tab() {
     });
 
     const onPeriodicUpdate = () => {
-        let message = "running periodic update\n" + 
-        "dynamic dirty: " + dynamicDirty + "\n" +
-        "dirty: " + dirty + "\n" +
-        "lastDirty: " + lastDirty + "\n";
-        console.log(message);
         setDirty(dynamicDirty);
         setDynamicDirty(false);
         if(lastDirty === true && dirty === false) {
             handleSave();
-            console.log("saving");
+            console.log('saving');
         }
     }
 
     const dirtyContents = () => {
-        console.log("dirtying contents");
+        console.log('dirtying contents');
         setDynamicDirty(true);
     }
 
@@ -115,7 +110,7 @@ export function Tab() {
             if (result.key_is_gone == true) {
                 navigate('/');
             } else {
-                console.log("key was not deleted");
+                console.log('key was not deleted');
             }
         }).catch(err => console.log(err));
     }

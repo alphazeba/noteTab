@@ -1,32 +1,32 @@
-const BASE_URL = "/"
+const BASE_URL = '/'
 
 export function loadTab(key) {
-    return api("tab/" + key, GET());
+    return api('tab/' + key, GET());
 }
 
 export function saveTab(key, title, body) {
-    return api("tab/" + key, POST({
+    return api('tab/' + key, POST({
         title: title, 
         body: body
     }));
 }
 
 export function listTabs() {
-    return api("listtabs", GET());
+    return api('listtabs', GET());
 }
 
 export function deleteTab(key) {
-    return api("tab/" + key, DELETE());
+    return api('tab/' + key, DELETE());
 }
 
 export function validateKey(key) {
-    return api("valid/" + key, GET());
+    return api('valid/' + key, GET());
 }
 
 ///// helpers below
 // should be able to chain with .then((parsedJsonObj) => {..})
 function api(path, payload) {
-    console.log("querying " + path + " with method " + payload.method);
+    console.log('querying ' + path + ' with method ' + payload.method);
     return fetch(BASE_URL + path, payload)
         .then((response) => {
             console.log(response);

@@ -93,7 +93,6 @@ impl IoInterface for FileIo {
                     continue;
                 }
             };
-            println!("Name: {}", key.to_string());
             output.push(key);
         }
         Ok(output)

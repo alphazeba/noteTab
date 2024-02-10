@@ -22,13 +22,13 @@ export function New() {
                 if (response.valid === true) {
                     navigate('/notetab/' + potentialKey);
                 } else {
-                    throw Error("key not valid");
+                    throw Error('key not valid');
                 }
             })
             .catch(err => {
                 console.log(err);
                 console.log(
-                    "potential key: " + potentialKey + " was not valid");
+                    'potential key: ' + potentialKey + ' was not valid');
                 setWaiting(false);
             });
     }

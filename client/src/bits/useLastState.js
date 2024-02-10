@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import {useState} from 'react';
 
 export function useLastState(initialValue, provideSetOnChange=false) {
     let [currentState, setCurrentState] = useState(initialValue);
