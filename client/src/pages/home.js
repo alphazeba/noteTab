@@ -4,6 +4,7 @@ import {useInputState} from '../bits/useInputState';
 
 import {listTabs} from '../io/api';
 import {Wrapper} from '../bits/Wrapper';
+import {searchFilterFunction} from '../bits/searchFilter'
 
 export function Home() {
     const [loadedTabs, setLoadedTabs] = useState(false);
@@ -44,14 +45,10 @@ export function Home() {
         goToTab(key);
     }
 
-    const filterFunction = (tab, searchTerm) => {
-        return tab.title.includes(searchTerm);
-    }
-
     const onSearchTermChange = (searchTerm) => {
         if (searchTerm) {
             setFilteredTabs(
-                tabs.filter((t)=>filterFunction(t,searchTerm))
+                tabs.filter((t)=>searchFilterFunction(t,searchTerm))
             );
         }
     }
