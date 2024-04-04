@@ -5,6 +5,8 @@ use rocket::serde::json::serde_json;
 pub struct NoteTab {
     pub title: String,
     pub body: String,
+    #[serde(default="bool::default")]
+    pub locked: bool,
     pub version: u32,
 }
 
@@ -13,6 +15,7 @@ impl NoteTab {
         NoteTab {
             title,
             body,
+            locked: false,
             version: 0, // this doesn't do anything yet
         }
     }

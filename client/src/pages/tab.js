@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {loadTab, saveTab, deleteTab} from '../io/api';
+import {callLoadTab, callSaveTab} from '../io/api';
 import {Wrapper} from '../bits/Wrapper';
 import {useInputState} from '../bits/useInputState';
 import {useLastState} from '../bits/useLastState';
 import {useParams, useNavigate} from 'react-router-dom';
+import {DeleteButton} from '../bits/deleteButton';
 import '@mdxeditor/editor/style.css'
 import { MDXEditor,
     headingsPlugin,
@@ -84,7 +85,7 @@ export function Tab() {
 
     const handleLoad = () => {
         setWaiting(true);
-        loadTab(key)
+        callLoadTab(key)
             .then((result) => {
                 setTitle(result.title);
                 setBody(result.body);
@@ -98,41 +99,15 @@ export function Tab() {
     }
   
     const handleSave = () => {
-      saveTab(key, title, body).then((result) => {
+      callSaveTab(key, title, body).then((result) => {
         if (result.key !== key) {
             navigate('/notetab/' + result.key);
         }
       }).catch(err => console.log(err));
     }
 
-    const handleDelete = () => {
-        deleteTab(key).then((result) => {
-            if (result.key_is_gone == true) {
-                navigate('/');
-            } else {
-                console.log('key was not deleted');
-            }
-        }).catch(err => console.log(err));
-    }
-
-    const handleActivateDeleteButton = () => {
-        setDeleteActivated(true);
-    }
-
-    const renderDeleteButton = () => {
-        let className = 'deleteButton';
-        let handler = handleActivateDeleteButton;
-        if (deleteActivated) {
-            className += ' activeDeleteButton';
-            handler = handleDelete;
-        }
-        return <button className={className} onClick={handler}>
-            x
-        </button>
-    }
-
     return (
-        <Wrapper rightContents={renderDeleteButton()}>
+        <Wrapper rightContents={<DeleteButton notetabKey={key}/>}>
             <div className='tab'>
                 <input className='title' value={title} onChange={titleChange}/>
                 <div className='editor'>

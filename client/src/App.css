@@ -44,7 +44,7 @@
 
 .ntButtonHolder {
   text-align: left;
-  margin-left: calc(50% - 5em);
+  margin-left: calc(50% - 7em);
 }
 
 .ntButton {
@@ -53,7 +53,14 @@
   background-color: inherit;
   cursor: pointer;
   color: white;
-  border: none;
+  text-decoration: none;
+  border-width: 1px;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.ntButtonSelected {
+  border-color: white;
 }
 
 .noTabs {

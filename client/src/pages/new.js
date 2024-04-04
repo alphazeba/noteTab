@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Wrapper} from '../bits/Wrapper';
 import {useNavigate} from 'react-router-dom';
 import {generateNotePadKey} from '../util/generateNoteTabKey';
-import {validateKey} from '../io/api';
+import {callValidateKey} from '../io/api';
 
 export function New() {
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ export function New() {
     const validateNewKey = () => {
         setWaiting(true);
         let potentialKey = generateNotePadKey();
-        validateKey(potentialKey)
+        callValidateKey(potentialKey)
             .then(response => {
                 if (response.valid === true) {
                     navigate('/notetab/' + potentialKey);

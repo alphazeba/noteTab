@@ -1,25 +1,25 @@
 const BASE_URL = '/'
 
-export function loadTab(key) {
+export function callLoadTab(key) {
     return api('tab/' + key, GET());
 }
 
-export function saveTab(key, title, body) {
+export function callSaveTab(key, title, body) {
     return api('tab/' + key, POST({
         title: title, 
         body: body
     }));
 }
 
-export function listTabs() {
+export function callListTabs() {
     return api('listtabs', GET());
 }
 
-export function deleteTab(key) {
+export function callDeleteTab(key) {
     return api('tab/' + key, DELETE());
 }
 
-export function validateKey(key) {
+export function callValidateKey(key) {
     return api('valid/' + key, GET());
 }
 

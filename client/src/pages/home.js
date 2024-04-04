@@ -2,13 +2,15 @@ import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useInputState} from '../bits/useInputState';
 
-import {listTabs} from '../io/api';
+import {callListTabs} from '../io/api';
 import {Wrapper} from '../bits/Wrapper';
-import {searchFilterFunction} from '../bits/searchFilter'
+import {searchFilterFunction} from '../bits/searchFilter';
+import {DeleteButton} from '../bits/deleteButton';
 
 export function Home() {
     const [loadedTabs, setLoadedTabs] = useState(false);
     const [tabs, setTabs] = useState([]);
+    const [selectedIndex, setSelectedIndex] = useState(0);
     const [
         searchTerm,
         setSearchTerm,
@@ -25,14 +27,53 @@ export function Home() {
         }
     });
 
-    const initTabs = (tabs) => {
+    useEffect(() => {
+        // key listeners.
+        document.addEventListener('keydown', handleKeyDown, true);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown, true);
+        };
+    })
+
+    const handleKeyDown = (e) => {
+        if (e.key === "ArrowUp") {
+            e.preventDefault()
+            updateSelectedIndex(-1);
+        } else if (e.key === "ArrowDown") {
+            e.preventDefault()
+            updateSelectedIndex(1);
+        }
+    }
+
+    const updateSelectedIndex = (delta) => {
+        if (selectedIndex === null) {
+            return;
+        }
+        let newSelectedIndex = selectedIndex + delta;
+        if (newSelectedIndex < 0 || newSelectedIndex >= getTargetTabs().length) {
+            return;
+        }
+        setSelectedIndex(newSelectedIndex);
+    }
+
+    const initTabs = (tabs, searchTerm='') => {
         setTabs(tabs);
-        setFilteredTabs(tabs);
-        setSearchTerm('');
+        setSearchTerm(searchTerm);
+    }
+
+    const handleDelete = (key) => {
+        console.log("hanlding delte of " + key);
+        let newTabs = tabs.filter((tab) => {
+            console.log("tabkey: " + tab.key + "  key: " + key);
+            return tab.key !== key;
+        });
+        console.log("relative newTab size to tabs " + (tabs.length - newTabs.length))
+        setTabs(newTabs);
+        updateSearch(newTabs, searchTerm);
     }
 
     const handleLoad = () => {
-        listTabs().then((result) => {
+        callListTabs().then((result) => {
             initTabs(result.items);
         }).catch(err => console.log(err));
     }
@@ -41,24 +82,22 @@ export function Home() {
         navigate('/notetab/' + key);
     }
 
-    const handleTabClick = (key) => {
-        goToTab(key);
+    const updateSearch = (tabs, searchTerm) => {
+        let newFilteredTabs = searchTerm ? tabs.filter((t)=>searchFilterFunction(t, searchTerm)) : tabs;
+        setFilteredTabs(newFilteredTabs);
+        setSelectedIndex(0)
     }
 
     const onSearchTermChange = (searchTerm) => {
-        if (searchTerm) {
-            setFilteredTabs(
-                tabs.filter((t)=>searchFilterFunction(t,searchTerm))
-            );
-        }
+        updateSearch(tabs, searchTerm);
     }
     setSearchTermOnChange(onSearchTermChange);
 
     const handleSubmitSearch = () => {
         console.log('submit pressed');
         let targetTabs = getTargetTabs();
-        if (targetTabs.length > 0) {
-            goToTab(targetTabs[0].key);
+        if (selectedIndex < targetTabs.length) {
+            goToTab(targetTabs[selectedIndex].key);
         }
     }
 
@@ -101,15 +140,23 @@ export function Home() {
         if (searchTerm && filteredTabs.length === 0) {
             return nothingMatchesNotice();
         }
-        return getTargetTabs().map((tab) => {
-            return <div>
-                <button
-                    className='ntButton'
+        return getTargetTabs().map((tab, index) => {
+            let className = 'ntButton';
+            if (selectedIndex === index) {
+                className += ' ntButtonSelected';
+            }
+            return <div key={tab.key}>
+                <DeleteButton
+                    notetabKey={tab.key}
+                    onDelete={handleDelete}
+                />
+                <a
+                    className={className}
                     key={tab.key}
-                    onClick={()=>handleTabClick(tab.key)}
+                    href={'/notetab/' + tab.key}
                 >
-                    {tab.title}
-                </button>
+                    {tab.title ? tab.title : "(no title)"}
+                </a>
             </div>;
         });
     }
