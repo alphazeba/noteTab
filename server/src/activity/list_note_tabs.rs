@@ -3,39 +3,26 @@ use rocket::serde::Serialize;
 use rocket::State;
 
 use crate::data::injectables::Injectables;
-use crate::data::note_tab::NoteTab;
-use crate::io::iointerface::IoInterface;
 
 #[get("/listtabs")]
-pub fn list_note_tabs(
-    injectables_state: &State<Injectables>
-) -> Json<ListNoteTabsOutput> {
-    let io = injectables_state.get_io();
-    let keys = io.list_keys().unwrap();
-    let mut items: Vec<KeyTitle> = Vec::new();
+pub fn list_note_tabs(injectables_state: &State<Injectables>) -> Json<ListNoteTabsOutput> {
+    let keys = injectables_state.notetab_io.list_keys().unwrap();
+    let mut items: Vec<KeyTitle> = Vec::with_capacity(keys.len());
     for key in keys {
-        match get_key_title(&key, io) {
-            Ok(key_title) => items.push(key_title),
-            Err(msg) => println!("could not get keyTitle for key {}, got err {}",
-                key.to_string(), msg)
-        };
+        match injectables_state.notetab_io.get(&key) {
+            Ok(note_tab) => items.push(KeyTitle {
+                key: key.get().to_string(),
+                title: note_tab.title,
+            }),
+            Err(err) => println!("{:?}", err),
+        }
     }
     items.sort_by(|a, b| sort_form(&a.title).cmp(&sort_form(&b.title)));
-    Json(ListNoteTabsOutput {
-        items
-    })
+    Json(ListNoteTabsOutput { items })
 }
 
 fn sort_form(title: &String) -> String {
     title.to_lowercase()
-}
-
-fn get_key_title(key: &String, io: &dyn IoInterface) -> Result<KeyTitle, String> {
-    let note_tab = NoteTab::from_string(io.get_string(key)?)?;
-    Ok(KeyTitle {
-        key: key.to_string(),
-        title: note_tab.title,
-    })
 }
 
 #[derive(Serialize)]

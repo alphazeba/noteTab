@@ -7,7 +7,8 @@ export function callLoadTab(key) {
 export function callSaveTab(key, title, body) {
     return api('tab/' + key, POST({
         title: title, 
-        body: body
+        body: body,
+        locked: false,
     }));
 }
 

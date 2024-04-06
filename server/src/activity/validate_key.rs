@@ -8,17 +8,13 @@ use crate::data::note_tab_key::NoteTabKey;
 #[get("/valid/<key>")]
 pub fn validate_key(
     key: NoteTabKey,
-    injectables_state: &State<Injectables>
+    injectables_state: &State<Injectables>,
 ) -> Json<ValidateKeyOutput> {
-    let exists: bool = match injectables_state
-            .get_io()
-            .get_string(key.get()) {
+    let exists: bool = match injectables_state.notetab_io.get(&key) {
         Ok(_) => true,
         Err(_) => false,
     };
-    Json(ValidateKeyOutput {
-        valid: !exists,
-    })
+    Json(ValidateKeyOutput { valid: !exists })
 }
 
 #[derive(Serialize)]

@@ -7,4 +7,4 @@ npm install
 npm run build
 echo building server
 cd $PROJ_DIR/server
-cargo build --release
+cargo build

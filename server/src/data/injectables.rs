@@ -1,11 +1,5 @@
-use crate::io::{iointerface::IoInterface, fileio::FileIo};
+use crate::io::note_tab_io::NoteTabIo;
 
 pub struct Injectables {
-    pub ioio: FileIo,
-}
-
-impl Injectables {
-    pub fn get_io(&self) -> &dyn IoInterface {
-        &self.ioio
-    }
+    pub notetab_io: Box<NoteTabIo>,
 }

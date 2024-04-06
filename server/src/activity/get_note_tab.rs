@@ -9,24 +9,15 @@ use crate::data::note_tab_key::NoteTabKey;
 #[get("/tab/<key>")]
 pub fn get_note_tab(
     key: NoteTabKey,
-    injectables_state: &State<Injectables>
+    injectables_state: &State<Injectables>,
 ) -> Json<GetNoteTabOutput> {
-    let note_tab = match injectables_state
-        .get_io()
-        .get_string(key.get()) {
-            Ok(json) => NoteTab::from_string(json)
-                .expect("could not deserialize note tab"),
-            Err(msg) => {
-                // TODO instead of turning errors into strings, i should keep them as errors
-                // if the file were in use or something, this would cause the file to be 
-                // ignored even though it existed.
-                println!("Could not load {}, got error ({}), returning new notetab",
-                    key.get(),
-                    msg,
-                );
-                NoteTab::new_empty()
-            }
-        };
+    let note_tab = match injectables_state.notetab_io.get(&key) {
+        Ok(note_tab) => note_tab,
+        Err(err) => {
+            println!("{:?}", err);
+            NoteTab::new_empty()
+        }
+    };
     let response = GetNoteTabOutput::from_note_tab(note_tab);
     Json(response)
 }
@@ -35,6 +26,7 @@ pub fn get_note_tab(
 pub struct GetNoteTabOutput {
     title: String,
     body: String,
+    locked: bool,
 }
 
 impl GetNoteTabOutput {
@@ -42,6 +34,7 @@ impl GetNoteTabOutput {
         GetNoteTabOutput {
             title: note_tab.title,
             body: note_tab.body,
+            locked: note_tab.locked,
         }
     }
 }
