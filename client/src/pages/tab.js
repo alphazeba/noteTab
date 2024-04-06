@@ -22,6 +22,7 @@ export function Tab() {
     const [key, setKey, keyChange] = useInputState(urlKey);
     const [title, setTitle, titleChange, setTitleOnChange] = useInputState('New Note', true);
     const [body, setBody, bodyChange, setBodyOnChange] = useInputState('', true);
+    const [locked, setLocked] = useState(false);
     const [dynamicDirty, setDynamicDirty] = useState(false);
     const [dirty, lastDirty, setDirty] = useLastState(false);
     const [tabIsLoaded, setTabIsLoaded] = useState(false);
@@ -77,11 +78,17 @@ export function Tab() {
         dirtyContents();
         document.title = title;
     }
+    setTitleOnChange(onTitleChange);
+
     const onBodyChange = (body) => {
         dirtyContents();
     }
-    setTitleOnChange(onTitleChange);
     setBodyOnChange(onBodyChange);
+
+    const handleLockClick = () => {
+        setLocked(!locked);
+        dirtyContents();
+    }
 
     const handleLoad = () => {
         setWaiting(true);
@@ -89,6 +96,7 @@ export function Tab() {
             .then((result) => {
                 setTitle(result.title);
                 setBody(result.body);
+                setLocked(result.locked);
                 setTabIsLoaded(true);
                 ref.current?.setMarkdown(result.body);
             })
@@ -99,15 +107,46 @@ export function Tab() {
     }
   
     const handleSave = () => {
-      callSaveTab(key, title, body).then((result) => {
+      callSaveTab(key, title, body, locked).then((result) => {
         if (result.key !== key) {
             navigate('/notetab/' + result.key);
         }
       }).catch(err => console.log(err));
     }
 
+    const handleDeleteFailed = (deleteKey, locked) => {
+        if (deleteKey == key) {
+            setLocked(locked);
+        }
+    }
+
+    const renderLockedButton = () => {
+        return (
+            <button 
+                className='deleteButton'
+                onClick={handleLockClick}
+            >
+                {locked ? "🔒" : "🔓"}
+            </button>
+        )
+    }
+
+    const renderRightContents = () => {
+        return (
+            <span>
+                {renderLockedButton()}
+                <span className='deleteButtonSpacer'>&nbsp;</span>
+                <DeleteButton
+                    notetabKey={key}
+                    onFail={handleDeleteFailed}
+                    locked={locked}
+                />
+            </span>
+        )
+    }
+
     return (
-        <Wrapper rightContents={<DeleteButton notetabKey={key}/>}>
+        <Wrapper rightContents={renderRightContents()}>
             <div className='tab'>
                 <input className='title' value={title} onChange={titleChange}/>
                 <div className='editor'>

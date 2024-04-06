@@ -17,7 +17,11 @@ pub fn delete_note_tab(
         Err(err) => panic!("{:?}", err),
     };
     if notetab.locked {
-        panic!("note tab is locked, it cannot be deleted");
+        println!("note tab is locked, it cannot be deleted");
+        return Json(DeleteNoteTabOutput {
+            key_is_gone: false,
+            key_is_locked: true,
+        })
     }
     let success = match injectables_state.notetab_io.delete(&key) {
         Ok(_) => true,
@@ -28,10 +32,12 @@ pub fn delete_note_tab(
     };
     Json(DeleteNoteTabOutput {
         key_is_gone: success,
+        key_is_locked: false,
     })
 }
 
 #[derive(Serialize)]
 pub struct DeleteNoteTabOutput {
     key_is_gone: bool, // trying to delete a key that does not exist will return true
+    key_is_locked: bool,
 }

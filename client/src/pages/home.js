@@ -72,6 +72,20 @@ export function Home() {
         updateSearch(newTabs, searchTerm);
     }
 
+    const handleDeleteFail = (key, locked) => {
+        console.log("handling delete failed for key " + key + ". key was locked?: " + locked);
+        if (locked) {
+            // update lock status of the given key
+            let newTabs = tabs.map((tab) => {
+                if (tab.key == key) {
+                    tab.locked = locked;
+                }
+                return tab;
+            });
+            setTabs(newTabs);
+        }
+    }
+
     const handleLoad = () => {
         callListTabs().then((result) => {
             initTabs(result.items);
@@ -149,6 +163,8 @@ export function Home() {
                 <DeleteButton
                     notetabKey={tab.key}
                     onDelete={handleDelete}
+                    onFail={handleDeleteFail}
+                    locked={tab.locked}
                 />
                 <a
                     className={className}

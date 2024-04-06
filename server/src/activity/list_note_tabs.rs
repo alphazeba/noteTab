@@ -13,6 +13,7 @@ pub fn list_note_tabs(injectables_state: &State<Injectables>) -> Json<ListNoteTa
             Ok(note_tab) => items.push(KeyTitle {
                 key: key.get().to_string(),
                 title: note_tab.title,
+                locked: note_tab.locked,
             }),
             Err(err) => println!("{:?}", err),
         }
@@ -34,4 +35,5 @@ pub struct ListNoteTabsOutput {
 pub struct KeyTitle {
     key: String,
     title: String,
+    locked: bool,
 }

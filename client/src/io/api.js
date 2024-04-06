@@ -4,11 +4,11 @@ export function callLoadTab(key) {
     return api('tab/' + key, GET());
 }
 
-export function callSaveTab(key, title, body) {
+export function callSaveTab(key, title, body, locked) {
     return api('tab/' + key, POST({
         title: title, 
         body: body,
-        locked: false,
+        locked: locked,
     }));
 }
 

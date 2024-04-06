@@ -172,15 +172,21 @@
   border: 0.2em solid;
   padding-bottom: 0.2em;
   width: 1.8em;
+  height: 1.8em;
   color: #181c24;;
   border-color: #181c24;
   background-color: transparent;
   transition: all 0.25s;
+  vertical-align: top;
 }
 
 .deleteButton:hover {
   color: black;
   border-color: black;
+}
+
+.deleteButtonLocked:hover {
+  color: transparent;
 }
 
 .activeDeleteButton {
@@ -192,6 +198,11 @@
 .activeDeleteButton:hover {
   color: white;
   border-color: white;
+}
+
+.deleteButtonSpacer {
+  width: 0.5em;
+  display: inline-block;
 }
 
 .editor a {
